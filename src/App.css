@@ -79,4 +79,11 @@ h1 {
   color: #c5aeff;
   text-decoration: line-through;
 }
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+}
  

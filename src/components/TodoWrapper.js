@@ -6,12 +6,22 @@ import { EditTodoForm } from './EditTodoForm';
 uuidv4();
 export const TodoWrapper = () => {
   const [todos, setTodos] = useState([])
+  const [errorMessage, setErrorMessage] = useState('');
 
   const addTodo = todo => {
-    setTodos([...todos, {id: uuidv4(), task: todo,
-    completed: false, isEditing: false}])
-    console.log(todos);
-  }
+    if (todo.trim() !== '') {
+      setTodos([
+        ...todos,
+        { id: uuidv4(), task: todo, completed: false, isEditing: false }
+      ]);
+      setErrorMessage('');
+    } else {
+      setErrorMessage('Task cannot be empty');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000); // Clear the error message after 3 seconds (adjust as needed)
+    }
+  };
   
   const toggleComplete = id => {
     setTodos(todos.map(todo => todo.id === id ? {...todo, 
@@ -28,12 +38,26 @@ export const TodoWrapper = () => {
   }
 
   const editTask = (task, id) => {
-    setTodos(todos.map(todo => todo.id === id ? {...todo,
-     task, isEditing: !todo.isEditing} : todo))
-  }
+    if (task.trim() !== '') {
+      setTodos(
+        todos.map(todo =>
+          todo.id === id ? { ...todo, task, isEditing: !todo.isEditing } : todo
+        )
+      );
+      setErrorMessage('');
+    } else {
+      setErrorMessage('Task cannot be empty');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 3000); // Clear the error message after 3 seconds (adjust as needed)
+    }
+  };
   return (
     <div className='TodoWrapper'>
       <h1>Get Things Done!</h1>
+      {errorMessage && (
+        <p className='error-message'>{errorMessage}</p>
+      )}
       <TodoForm addTodo = {addTodo}/>
       {todos.map((todo, index) => (
         todo.isEditing ? (
